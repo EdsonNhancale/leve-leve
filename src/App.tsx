@@ -60,9 +60,6 @@ const MyApp: FC = () => {
                         <DataTableColumnHeader>
                             Incident date
                         </DataTableColumnHeader>
-                        <DataTableColumnHeader>
-                            Last updated
-                        </DataTableColumnHeader>
                     </DataTableRow>
                 </TableHead>
                 <TableBody>
