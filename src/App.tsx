@@ -1,20 +1,42 @@
 import { useDataQuery } from '@dhis2/app-runtime'
 import i18n from '@dhis2/d2-i18n'
 import React, { FC, useEffect, useState } from 'react'
-import { DataTable, DataTableCell, DataTableColumnHeader, DataTableRow, TableBody, TableFoot, TableHead } from "@dhis2/ui";
+import { DataTable, DataTableCell, DataTableColumnHeader, DataTableRow, Pagination, TableBody, TableFoot, TableHead } from "@dhis2/ui";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import classes from './App.module.css'
 
 interface QueryResults {
-    me: {
+    results: {
         name: string
+        id: string
+        programTrackedEntityAttributes: {
+            trackedEntityAttribute: {
+                id: string
+                displayName: string
+                valueType: string
+                optionSet?: {
+                    options: {
+                        code: string
+                        name: string
+                    }[]
+                }
+            }
+        }[]
     }
 }
 
 const query = {
-    me: {
-        resource: 'me',
-    },
+    results: {
+        "resource": "programs",
+        "id": "rTmLXWgtUj2",
+        "params": {
+            "fields": [
+                "id,name",
+                "programTrackedEntityAttributes[trackedEnti
+                tyAttribute[id,displayName,valueType,optionSet[options[code,name]]]]"
+            ]
+        }
+    }
 }
 
 const MyApp: FC = () => {
@@ -51,18 +73,13 @@ const MyApp: FC = () => {
             <DataTable>
                 <TableHead>
                     <DataTableRow>
-                        <DataTableColumnHeader>
-                            First name
-                        </DataTableColumnHeader>
-                        <DataTableColumnHeader>
-                            Last name
-                        </DataTableColumnHeader>
-                        <DataTableColumnHeader>
-                            Incident date
-                        </DataTableColumnHeader>
-                        <DataTableColumnHeader>
-                            Last updated
-                        </DataTableColumnHeader>
+                        {
+                            data.results.programTrackedEntityAttributes.map((attribute) => (
+                                <DataTableColumnHeader key={attribute.trackedEntityAttribute.id}>
+                                    {attribute.trackedEntityAttribute.displayName}
+                                </DataTableColumnHeader>
+                            ))  
+                        }
                     </DataTableRow>
                 </TableHead>
                 <TableBody>
@@ -109,6 +126,14 @@ const MyApp: FC = () => {
                         </DataTableCell>
                     </DataTableRow>
                 </TableBody>
+                <Pagination
+                    onPageChange={function zA() { }}
+                    onPageSizeChange={function zA() { }}
+                    page={10}
+                    pageCount={21}
+                    pageSize={50}
+                    total={1035}
+                />
             </DataTable>
         </div>
     )
